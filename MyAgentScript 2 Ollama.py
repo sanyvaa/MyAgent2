@@ -1,19 +1,15 @@
 from dotenv import load_dotenv
 from agents import Agent, Runner, OpenAIChatCompletionsModel, AsyncOpenAI
-
-# https://blog.stackademic.com/openai-agents-sdk-with-ollama-fc85da11755d
+import DefineModel
 
 load_dotenv(override=True)
 
-# Configure the model
-model = OpenAIChatCompletionsModel( 
-    model="llama3.2",
-    openai_client=AsyncOpenAI(base_url="http://localhost:11434/v1"))
+DefineModel.InitModel()
 
 # Create the agent
-agent = Agent( name="Assistant",    instructions="You are a joke teller",  model=model)
+agent = Agent( name="Assistant",    instructions="You are a joke teller",  model=DefineModel.MyModel)
 
 # Run the agent synchronously
-result = Runner.run_sync(agent, "Tell a joke about cats")
+result = Runner.run_sync(agent, "Tell a joke about cats. also, return the name of LLM used.")
 
 print(result.final_output)

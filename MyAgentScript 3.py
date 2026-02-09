@@ -1,13 +1,16 @@
 from dotenv import load_dotenv
 from agents import Agent, Runner, trace
 import asyncio
+import DefineModel
+
+DefineModel.InitModel()
 
 async def AgentsCall():
-    with trace("Parallel random agent runs"):
+   # with trace("Parallel random agent runs"):
         results = await asyncio.gather(
-            Runner.run(agent1, message),
-            Runner.run(agent2, message),
-            #Runner.run(agent3, message),
+                Runner.run(agent1, message),
+                Runner.run(agent2, message),
+                Runner.run(agent3, message),
         )
         return results
 
@@ -18,25 +21,25 @@ message = "generate a random number between 1 and 100. Respond with only the num
 agent1 = Agent(
         name="randomizer agent 1",
         instructions=instructions,
-        model="gpt-4o-mini"
+        model=DefineModel.MyModel
 )
 
 agent2 = Agent(
         name="randomizer agent 2",
         instructions=instructions,
-        model="gpt-4o-mini"
+        model=DefineModel.MyModel
 )
 
 agent3 = Agent(
         name="randomizer agent 3",
         instructions=instructions,
-        model="gpt-4o-mini"
+        model=DefineModel.MyModel
 )
 
 agentSelectBigger = Agent(
         name="select maximum",
         instructions="You are an agent that selects the biggest number from a list of numbers provided to you. You must respond with only the number.",
-        model="gpt-4o-mini"
+        model=DefineModel.MyModel
 )
 
 results = asyncio.run(AgentsCall())
@@ -48,7 +51,7 @@ for output in outputs:
     numbers += output + " "
 print(numbers)
 
-with trace("Select maximum number"):
-        maximum = asyncio.run(Runner.run(agentSelectBigger, numbers))
+#with trace("Select maximum number"):
+maximum = asyncio.run(Runner.run(agentSelectBigger, numbers))
 
 print(f"Maximum: {maximum.final_output}")
